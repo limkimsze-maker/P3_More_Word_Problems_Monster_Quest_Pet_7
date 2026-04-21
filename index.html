@@ -1760,7 +1760,8 @@
         return `
           <div class="eq-card">
             <div class="eq-line"><span class="eq-chip">1 unit = ${q.knownUnitValue}</span></div>
-            <div class="eq-line"><span class="eq-chip">${q.totalUnits} units = ${q.knownUnitValue} ×</span><input class="blank small" id="eq_factor" inputmode="numeric" aria-label="number of total units"> = <input class="blank" id="eq_total" inputmode="numeric" aria-label="total"></div>
+            <div class="eq-line"><span class="eq-chip">${q.totalUnits} units</span><span class="eq-symbol-stack">=</span><input class="blank small" id="eq_factor1" inputmode="numeric" aria-label="factor 1"> × <input class="blank small" id="eq_factor2" inputmode="numeric" aria-label="factor 2"></div>
+            <div class="eq-line"><span class="eq-chip eq-chip-ghost">${q.totalUnits} units</span><span class="eq-symbol-stack">=</span><input class="blank" id="eq_total" inputmode="numeric" aria-label="total"></div>
             <div class="eq-line">${q.finalLine} <input class="blank" id="eq_final" inputmode="numeric" aria-label="final answer"> ${q.finalLineSuffix}</div>
           </div>
         `;
@@ -1936,8 +1937,10 @@
     let audioCtx = null;
     const correctAudio = new Audio('correct.mp3');
     const wrongAudio = new Audio('wrong.mp3');
+    const tadaAudio = new Audio('tada.mp3');
     correctAudio.preload = 'auto';
     wrongAudio.preload = 'auto';
+    tadaAudio.preload = 'auto';
 
     function playAudioFile(audioEl){
       try{
@@ -2002,6 +2005,19 @@
       tone(t + 0.01, 174.61, 0.20, 'sawtooth', 0.03);
     }
 
+    function playTadaSound(){
+      if(playAudioFile(tadaAudio)) return;
+      const ctx = getAudioCtx();
+      if(!ctx) return;
+      let t = ctx.currentTime + 0.02;
+      t = tone(t, 523.25, 0.10, 'triangle', 0.05);
+      t = tone(t + 0.02, 659.25, 0.12, 'triangle', 0.055);
+      t = tone(t + 0.02, 783.99, 0.14, 'triangle', 0.06);
+      t = tone(t + 0.03, 1046.50, 0.18, 'triangle', 0.065);
+      t = tone(t + 0.03, 1318.51, 0.20, 'triangle', 0.07);
+      tone(t + 0.04, 1567.98, 0.28, 'triangle', 0.075);
+    }
+
     function checkQuestion(){
       if(solved){
         nextQuestion();
@@ -2022,12 +2038,19 @@
       totalTarget.classList.add(labelState.bottom ? 'right' : 'wrong');
 
       if(q.type === 1){
-        const factor = toNumber('eq_factor');
+        const factor1 = toNumber('eq_factor1');
+        const factor2 = toNumber('eq_factor2');
         const total = toNumber('eq_total');
         const final = toNumber('eq_final');
 
+        const factorsOk = (
+          (factor1 === q.knownUnitValue && factor2 === q.totalUnits) ||
+          (factor1 === q.totalUnits && factor2 === q.knownUnitValue)
+        );
+
         const checks = {
-          eq_factor: factor === q.totalUnits,
+          eq_factor1: factorsOk && !Number.isNaN(factor1),
+          eq_factor2: factorsOk && !Number.isNaN(factor2),
           eq_total: total === q.finalAnswer,
           eq_final: final === q.finalAnswer
         };
@@ -2070,11 +2093,16 @@
         const finalCalc = toNumber('eq_finalCalc');
         const final = toNumber('eq_final');
 
+        const addOk = (
+          (startAmount === q.unitValue && extra === q.extraAmount) ||
+          (startAmount === q.extraAmount && extra === q.unitValue)
+        );
+
         const checks = {
           eq_divisor: divisor === q.sumUnits,
           eq_oneUnit: oneUnit === q.unitValue,
-          eq_startAmount: startAmount === q.unitValue,
-          eq_extra: extra === q.extraAmount,
+          eq_startAmount: addOk && !Number.isNaN(startAmount),
+          eq_extra: addOk && !Number.isNaN(extra),
           eq_finalCalc: finalCalc === q.finalAnswer,
           eq_final: final === q.finalAnswer
         };
@@ -2131,6 +2159,7 @@
       rewardText.textContent = 'You completed all 9 questions across Type 1, Type 2, Type 3 and Mixed Practice.';
       progressPill.textContent = `Finished ${JOURNEY_TARGET} / ${JOURNEY_TARGET}`;
       updateMissionCard();
+      playTadaSound();
     }
 
     function nextQuestion(){
