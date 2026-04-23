@@ -746,87 +746,90 @@
   </style>
 
 
+  
   <style id="display-boost-patch">
     :root{
-      --unit-w: 62px;
-      --unit-h: 46px;
+      --unit-w: 56px;
+      --unit-h: 42px;
     }
 
     .fit-viewport{
-      align-items:center;
-      justify-content:center;
+      align-items:flex-start;
+      justify-content:flex-start;
       overflow:hidden;
       padding:0;
     }
 
     .fit-stage{
-      position:relative;
+      position:absolute;
+      left:0;
+      top:0;
       transform-origin:top left;
+      will-change:transform;
     }
 
     .page{
-      width:1460px;
-      max-width:1460px;
-      min-width:1460px;
-      padding:10px 8px 12px;
+      width:1380px;
+      max-width:1380px;
+      min-width:1380px;
+      padding:8px 6px 10px;
       margin:0 auto;
     }
 
     .hero{
-      padding:18px 20px;
-      margin-bottom:12px;
+      padding:16px 18px;
+      margin-bottom:10px;
     }
 
-    .hero-top{gap:12px}
-    .title-wrap h1{font-size:50px}
-    .title-wrap p{font-size:20px}
+    .title-wrap h1{font-size:44px}
+    .title-wrap p{font-size:18px}
+
     .pill{
-      font-size:21px;
-      padding:12px 18px;
-      min-width:156px;
+      font-size:19px;
+      padding:10px 16px;
+      min-width:145px;
     }
 
-    .mode-bar{gap:12px}
     .mode-btn{
-      font-size:22px;
-      padding:14px 18px;
+      font-size:20px;
+      padding:12px 16px;
       border-radius:16px;
     }
 
-    .mission-title{font-size:24px}
-    .mission-meta{font-size:17px}
-    .mission-streak{font-size:20px}
+    .mission-title{font-size:22px}
+    .mission-meta{font-size:16px}
+    .mission-streak{font-size:18px}
     .mission-star{
-      width:36px;
-      height:36px;
-      font-size:20px;
+      width:34px;
+      height:34px;
+      font-size:18px;
     }
 
     .main-grid{
-      grid-template-columns:1.16fr .92fr .78fr;
-      gap:14px;
+      grid-template-columns:1.14fr .90fr .76fr;
+      gap:12px;
     }
 
     .card{
-      padding:18px;
-      border-radius:24px;
+      padding:16px;
+      border-radius:22px;
     }
 
     .panel-card,
     .work-card{
-      min-height:690px;
+      min-height:640px;
     }
 
     .type-badge{
-      font-size:24px;
-      padding:10px 14px;
+      font-size:22px;
+      padding:9px 13px;
       margin-bottom:8px;
     }
 
     .question-text{
-      font-size:34px;
-      line-height:1.26;
-      margin:0 0 10px;
+      font-size:30px;
+      line-height:1.24;
+      margin:0 0 8px;
     }
 
     .mini-note,
@@ -834,14 +837,13 @@
     .work-note,
     .type3-step-caption,
     .builder-note,
-    #labelToolHelp,
-    .builder-note strong{
-      font-size:19px;
-      line-height:1.35;
+    #labelToolHelp{
+      font-size:17px;
+      line-height:1.32;
     }
 
     .builder-note{
-      padding:12px 14px;
+      padding:10px 12px;
       margin-bottom:10px;
     }
 
@@ -852,214 +854,180 @@
     }
 
     .model-row{
-      grid-template-columns:118px 1fr;
-      gap:12px;
+      grid-template-columns:112px 1fr;
+      gap:10px;
     }
 
     .row-label{
-      min-height:56px;
-      font-size:24px;
+      min-height:52px;
+      font-size:22px;
       padding:10px 8px;
       margin-top:18px;
     }
 
     .annot-wrap{
-      padding-top:34px;
-      padding-bottom:36px;
-      min-height:152px;
+      padding-top:30px;
+      padding-bottom:32px;
+      min-height:142px;
     }
 
     .drop-zone{
-      min-height:82px;
-      padding:14px 12px;
-      border-radius:18px;
+      min-height:76px;
+      padding:12px 10px;
+      border-radius:16px;
     }
 
     .label-target,
     .type3-side-label-target{
-      width:70px;
-      min-width:70px;
-      height:34px;
-      min-height:34px;
-      font-size:18px;
+      width:64px;
+      min-width:64px;
+      height:32px;
+      min-height:32px;
+      font-size:17px;
     }
 
     .placed-tag{
-      font-size:22px;
-      border-radius:9px;
+      font-size:20px;
     }
 
     .brace-svg{
-      height:28px;
+      height:26px;
     }
 
     .palette-unit,
     .ghost-unit{
-      width:96px;
-      height:58px;
-      font-size:19px;
+      width:92px;
+      height:56px;
+      font-size:18px;
     }
 
     .palette-tag,
     .ghost-tag{
-      min-width:86px;
-      height:52px;
-      font-size:19px;
-      padding:0 16px;
+      min-width:82px;
+      height:48px;
+      font-size:18px;
+      padding:0 14px;
     }
 
     .model-unit{
       width:var(--unit-w);
       height:var(--unit-h);
-      border-radius:8px;
     }
 
     .model-unit::after{
-      font-size:14px;
+      font-size:13px;
     }
 
     .subpanel{
-      padding:16px;
-      border-radius:18px;
-    }
-
-    .tool-shell,
-    .toolbox,
-    .equation-wrap{
-      gap:12px;
-    }
-
-    .tool-row{
-      gap:12px;
+      padding:14px;
     }
 
     .btn{
-      font-size:20px;
-      padding:14px 18px;
-      border-radius:16px;
+      font-size:18px;
+      padding:12px 16px;
+      border-radius:15px;
     }
 
     .eq-card{
-      padding:16px;
-      gap:12px;
+      padding:14px;
+      gap:10px;
     }
 
     .eq-line{
-      font-size:29px;
-      line-height:1.35;
-      gap:10px;
+      font-size:26px;
+      line-height:1.32;
+      gap:8px;
     }
 
     .eq-indent-text,
     .eq-indent,
     .eq-label,
     .eq-spacer{
-      width:108px;
-      min-width:108px;
+      width:100px;
+      min-width:100px;
     }
 
     .eq-under-units{
-      width:156px;
-      min-width:156px;
+      width:146px;
+      min-width:146px;
     }
 
     .eq-symbol,
     .eq-symbol-stack{
-      width:24px;
-      min-width:24px;
-      font-size:28px;
+      width:22px;
+      min-width:22px;
+      font-size:24px;
     }
 
     .blank{
-      width:96px;
-      min-width:96px;
-      height:50px;
-      font-size:27px;
-      border-radius:14px;
+      width:90px;
+      min-width:90px;
+      height:46px;
+      font-size:24px;
     }
 
     .blank.small{
-      width:82px;
-      min-width:82px;
+      width:78px;
+      min-width:78px;
     }
 
     .eq-chip{
-      min-height:48px;
-      font-size:23px;
-      padding:8px 16px;
+      min-height:44px;
+      font-size:21px;
+      padding:8px 14px;
     }
 
     .feedback{
-      min-height:74px;
-      font-size:22px;
-      line-height:1.35;
-      padding:16px;
+      min-height:70px;
+      font-size:20px;
+      line-height:1.32;
+      padding:14px;
     }
 
     .celebrate{
-      font-size:42px;
+      font-size:40px;
     }
 
     .reward-screen h2,
     .end-screen h2{
-      font-size:44px;
+      font-size:42px;
     }
 
     .reward-screen p,
     .end-screen p,
     .reward-remark{
-      font-size:24px;
+      font-size:22px;
     }
 
     .reward-pet-wrap{
-      width:420px;
-      max-width:420px;
+      width:390px;
+      max-width:390px;
     }
 
     .reward-pet-wrap img{
-      width:290px;
+      width:280px;
       max-width:100%;
     }
 
     .work-area{
-      min-height:610px;
-      border-radius:18px;
+      min-height:560px;
     }
 
     .place-head{
-      width:252px;
-      grid-template-columns:repeat(4,63px);
+      width:244px;
+      grid-template-columns:repeat(4,61px);
     }
 
     .place-head span{
-      font-size:24px;
-    }
-
-    .place-vert:nth-of-type(1){left:18px}
-    .place-vert:nth-of-type(2){left:81px}
-    .place-vert:nth-of-type(3){left:144px}
-    .place-vert:nth-of-type(4){left:207px}
-    .place-vert:nth-of-type(5){left:270px}
-
-    footer{
-      margin-top:10px;
-      font-size:17px;
-      padding:6px 4px 0;
+      font-size:22px;
     }
 
     .back-main-btn{
-      font-size:13px;
-      padding:6px 10px;
-    }
-
-    @media (max-width: 1180px){
-      .page{
-        width:1460px;
-        max-width:1460px;
-        min-width:1460px;
-      }
+      font-size:12px;
+      padding:5px 9px;
     }
   </style>
+
 
 </head>
 <body>
@@ -2760,13 +2728,12 @@
 
       const scale = Math.min(vw / baseWidth, vh / baseHeight);
       const scaledWidth = baseWidth * scale;
-      const scaledHeight = baseHeight * scale;
 
       fitStage.style.width = `${baseWidth}px`;
       fitStage.style.height = `${baseHeight}px`;
       fitStage.style.transform = `scale(${scale})`;
       fitStage.style.left = `${Math.max(0, (vw - scaledWidth) / 2)}px`;
-      fitStage.style.top = `${Math.max(0, (vh - scaledHeight) / 2)}px`;
+      fitStage.style.top = `0px`;
     }
 
     function requestViewportFit(){
