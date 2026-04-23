@@ -1673,6 +1673,451 @@
     }
   </style>
 
+
+  <style id="bottom-compact-patch">
+    /* Keep the top as-is, compress the lower half so the action buttons are visible */
+    .main-grid{
+      gap: 6px !important;
+      align-items: stretch !important;
+    }
+
+    .card{
+      padding: 8px !important;
+    }
+
+    .panel-card,
+    .work-card{
+      min-height: 455px !important;
+    }
+
+    #modelCard,
+    #toolCard,
+    .tool-shell,
+    .equation-wrap{
+      gap: 5px !important;
+    }
+
+    .type-badge{
+      margin-bottom: 4px !important;
+      font-size: 13px !important;
+      padding: 5px 10px !important;
+    }
+
+    .question-text{
+      font-size: 19px !important;
+      line-height: 1.14 !important;
+      margin: 0 0 5px !important;
+    }
+
+    .mini-note,
+    .tool-note,
+    .work-note,
+    .builder-note,
+    #labelToolHelp,
+    .type3-step-caption{
+      font-size: 10px !important;
+      line-height: 1.15 !important;
+    }
+
+    .builder-note{
+      padding: 7px 9px !important;
+      margin-bottom: 4px !important;
+      border-radius: 10px !important;
+    }
+
+    .model-area{
+      min-height: 210px !important;
+      margin-top: 4px !important;
+      gap: 5px !important;
+      padding-bottom: 2px !important;
+    }
+
+    .model-row{
+      grid-template-columns: 80px 1fr !important;
+      gap: 6px !important;
+    }
+
+    .row-label{
+      min-height: 34px !important;
+      font-size: 13px !important;
+      padding: 5px 5px !important;
+      margin-top: 8px !important;
+      border-radius: 10px !important;
+    }
+
+    .annot-wrap{
+      padding-top: 18px !important;
+      padding-bottom: 18px !important;
+      min-height: 78px !important;
+    }
+
+    .drop-zone{
+      min-height: 44px !important;
+      padding: 6px 7px !important;
+      border-radius: 10px !important;
+    }
+
+    .label-target,
+    .type3-side-label-target{
+      width: 46px !important;
+      min-width: 46px !important;
+      height: 20px !important;
+      min-height: 20px !important;
+      font-size: 10px !important;
+    }
+
+    .placed-tag{
+      font-size: 12px !important;
+      padding: 0 4px !important;
+    }
+
+    .brace-svg{
+      height: 18px !important;
+    }
+
+    .model-unit{
+      width: 42px !important;
+      height: 30px !important;
+    }
+
+    .model-unit::after{
+      font-size: 8px !important;
+    }
+
+    .palette-unit,
+    .ghost-unit{
+      width: 62px !important;
+      height: 36px !important;
+      font-size: 12px !important;
+    }
+
+    .palette-tag,
+    .ghost-tag{
+      min-width: 58px !important;
+      height: 34px !important;
+      font-size: 12px !important;
+      padding: 0 8px !important;
+    }
+
+    .subpanel{
+      padding: 8px !important;
+      border-radius: 10px !important;
+    }
+
+    .tool-row,
+    .btn-row{
+      gap: 6px !important;
+    }
+
+    .btn{
+      font-size: 12px !important;
+      padding: 7px 9px !important;
+      border-radius: 10px !important;
+    }
+
+    .eq-card{
+      padding: 8px !important;
+      gap: 5px !important;
+      border-radius: 10px !important;
+    }
+
+    .eq-line{
+      font-size: 13px !important;
+      line-height: 1.12 !important;
+      gap: 5px !important;
+    }
+
+    .eq-indent-text,
+    .eq-indent,
+    .eq-label,
+    .eq-spacer{
+      width: 58px !important;
+      min-width: 58px !important;
+    }
+
+    .eq-under-units{
+      width: 84px !important;
+      min-width: 84px !important;
+    }
+
+    .eq-symbol,
+    .eq-symbol-stack{
+      width: 14px !important;
+      min-width: 14px !important;
+      font-size: 13px !important;
+    }
+
+    .blank{
+      width: 50px !important;
+      min-width: 50px !important;
+      height: 28px !important;
+      font-size: 14px !important;
+      border-radius: 8px !important;
+      padding: 2px 4px !important;
+    }
+
+    .blank.small{
+      width: 44px !important;
+      min-width: 44px !important;
+    }
+
+    .eq-chip{
+      min-height: 28px !important;
+      font-size: 12px !important;
+      padding: 4px 8px !important;
+      border-radius: 9px !important;
+    }
+
+    .feedback{
+      min-height: 36px !important;
+      font-size: 11px !important;
+      line-height: 1.12 !important;
+      padding: 8px !important;
+      border-radius: 10px !important;
+    }
+
+    .celebrate{
+      font-size: 20px !important;
+    }
+
+    .work-head{
+      gap: 5px !important;
+      margin-bottom: 4px !important;
+    }
+
+    .work-area{
+      min-height: 320px !important;
+      border-radius: 10px !important;
+    }
+
+    .place-head{
+      width: 172px !important;
+      top: 6px !important;
+      left: 10px !important;
+      grid-template-columns: repeat(4, 43px) !important;
+    }
+
+    .place-head span{
+      font-size: 14px !important;
+    }
+
+    .place-rows{
+      top: 26px !important;
+      padding: 0 8px 6px !important;
+    }
+
+    .place-line{
+      bottom: 4px !important;
+    }
+
+    footer{
+      margin-top: 2px !important;
+      font-size: 9px !important;
+      padding: 0 !important;
+    }
+
+    /* Slightly reduce the back button so it doesn't cover controls */
+    .back-main-btn{
+      font-size: 9px !important;
+      padding: 3px 6px !important;
+      right: 5px !important;
+      bottom: 5px !important;
+    }
+  </style>
+
+
+  <style id="hto-grid-fix-patch">
+    /* Make H, T and O each sit in one proper square in the working space */
+    .work-area{
+      --grid-left: 14px;
+      --col-w: 48px;
+    }
+
+    .place-head{
+      left: var(--grid-left) !important;
+      width: calc(var(--col-w) * 4) !important;
+      grid-template-columns: repeat(4, var(--col-w)) !important;
+      top: 6px !important;
+    }
+
+    .place-head span{
+      width: var(--col-w) !important;
+      min-width: var(--col-w) !important;
+      justify-content: center !important;
+      text-align: center !important;
+      font-size: 14px !important;
+      line-height: 1 !important;
+    }
+
+    /* Align the vertical guide lines exactly to the square borders */
+    .place-grid > .place-vert:nth-of-type(2){ left: calc(var(--grid-left) + (var(--col-w) * 0)) !important; }
+    .place-grid > .place-vert:nth-of-type(3){ left: calc(var(--grid-left) + (var(--col-w) * 1)) !important; }
+    .place-grid > .place-vert:nth-of-type(4){ left: calc(var(--grid-left) + (var(--col-w) * 2)) !important; }
+    .place-grid > .place-vert:nth-of-type(5){ left: calc(var(--grid-left) + (var(--col-w) * 3)) !important; }
+    .place-grid > .place-vert:nth-of-type(6){ left: calc(var(--grid-left) + (var(--col-w) * 4)) !important; }
+
+    .place-rows{
+      top: 26px !important;
+      padding: 0 8px 6px !important;
+    }
+
+    .place-line{
+      bottom: 4px !important;
+    }
+  </style>
+
+
+  <style id="restore-model-position-patch">
+    /* Restore model section to original uploaded layout */
+    .model-area{
+      display:grid !important;
+      gap:10px !important;
+      align-content:start !important;
+      padding-bottom:34px !important;
+      flex:1 !important;
+      margin-top:35px !important;
+      position:relative !important;
+      min-height:auto !important;
+      overflow:visible !important;
+    }
+
+    .model-area.side-total-layout{padding-right:100px !important}
+    .model-area.type1-layout > .model-row:nth-of-type(2){transform:translateY(-75px) !important}
+    .model-area.type2-layout > .model-row:nth-of-type(2){transform:translateY(-75px) !important}
+    .model-area.type3-layout{padding-right:100px !important}
+    .model-area.type3-layout > .model-row:nth-of-type(2){transform:translateY(-73px) !important}
+
+    .model-row{
+      display:grid !important;
+      grid-template-columns:minmax(88px,110px) 1fr !important;
+      gap:10px !important;
+      align-items:center !important;
+    }
+
+    .row-label{
+      min-height:48px !important;
+      border-radius:14px !important;
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      font-size:20px !important;
+      font-weight:700 !important;
+      padding:10px 8px !important;
+      margin-top:26px !important;
+      align-self:start !important;
+    }
+
+    .annot-wrap{
+      position:relative !important;
+      padding-top:30px !important;
+      padding-bottom:34px !important;
+      min-height:134px !important;
+    }
+
+    .drop-zone{
+      min-height:68px !important;
+      padding:12px 10px !important;
+      border-radius:16px !important;
+      display:flex !important;
+      align-items:center !important;
+      gap:0 !important;
+      overflow:visible !important;
+      position:relative !important;
+    }
+
+    .label-target{
+      width:56px !important;
+      min-width:56px !important;
+      height:28px !important;
+      min-height:28px !important;
+      border-radius:10px !important;
+    }
+
+    .placed-tag{
+      font-size:18px !important;
+      line-height:1 !important;
+      padding:0 6px !important;
+      border-radius:8px !important;
+    }
+
+    .brace-svg{
+      height:24px !important;
+    }
+
+    .model-unit{
+      width:var(--unit-w) !important;
+      height:var(--unit-h) !important;
+      border-radius:7px !important;
+    }
+
+    .model-unit::after{
+      font-size:11px !important;
+    }
+
+    .type3-side-anchor{
+      width:96px !important;
+    }
+
+    .type3-side-brace-wrap{
+      width:28px !important;
+    }
+
+    .type3-side-label-target{
+      width:56px !important;
+      min-width:56px !important;
+      height:28px !important;
+      min-height:28px !important;
+      border-radius:10px !important;
+    }
+
+    .type3-partwhole{
+      margin-top:10px !important;
+      padding:16px 12px 8px !important;
+    }
+
+    .type3-step-caption{
+      font-size:15px !important;
+      margin-bottom:8px !important;
+    }
+
+    .type3-whole-block{
+      position:relative !important;
+      padding-top:28px !important;
+      width:min(360px, calc(100% - 52px)) !important;
+      margin-left:78px !important;
+    }
+
+    .type3-whole-label{
+      top:-30px !important;
+      font-size:30px !important;
+    }
+
+    .type3-whole-brace{
+      top:12px !important;
+      height:24px !important;
+    }
+
+    .type3-partwhole-bar{
+      min-height:34px !important;
+      border-radius:7px !important;
+    }
+
+    .type3-partwhole-seg{
+      min-height:34px !important;
+    }
+
+    .type3-partwhole-labels{
+      margin-top:8px !important;
+      width:min(360px, calc(100% - 52px)) !important;
+      margin-left:78px !important;
+    }
+
+    .type3-partwhole-chip{
+      font-size:18px !important;
+      text-align:center !important;
+    }
+  </style>
+
 </head>
 <body>
 <a class="back-main-btn"
