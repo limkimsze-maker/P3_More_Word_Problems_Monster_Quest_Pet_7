@@ -2118,6 +2118,15 @@
     }
   </style>
 
+
+  <style id="mode-gating-patch">
+    .mode-btn[disabled]{
+      opacity:.5;
+      cursor:not-allowed;
+      filter:saturate(.8);
+    }
+  </style>
+
 </head>
 <body>
 <a class="back-main-btn"
@@ -2649,6 +2658,25 @@
       type3: 'Type 3'
     };
 
+    const MODE_FLOW = ['type1','type2','type3','mixed'];
+
+    function modeIsCleared(mode){
+      return (modeProgress[mode] || 0) >= ((modeQueues[mode] && modeQueues[mode].length) || MODE_TARGETS[mode]);
+    }
+
+    function isModeUnlocked(mode){
+      const idx = MODE_FLOW.indexOf(mode);
+      if(idx <= 0) return true;
+      for(let i = 0; i < idx; i++){
+        if(!modeIsCleared(MODE_FLOW[i])) return false;
+      }
+      return true;
+    }
+
+    function getNextRequiredMode(){
+      return MODE_FLOW.find(mode => !modeIsCleared(mode)) || 'mixed';
+    }
+
     const modeButtons = Array.from(document.querySelectorAll('.mode-btn'));
     const questionText = document.getElementById('questionText');
     const typeBadge = document.getElementById('typeBadge');
@@ -3146,8 +3174,11 @@
     function updateModeButtons(){
       modeButtons.forEach(btn => {
         const mode = btn.dataset.mode;
-        const done = modeProgress[mode] >= (modeQueues[mode]?.length || MODE_TARGETS[mode]);
+        const done = modeIsCleared(mode);
+        const unlocked = isModeUnlocked(mode);
         btn.classList.toggle('active', mode === currentMode);
+        btn.disabled = !unlocked;
+        btn.title = unlocked ? '' : `Complete ${modeNames[MODE_FLOW[MODE_FLOW.indexOf(mode)-1]]} first`;
         btn.textContent = done
           ? `${mode === 'mixed' ? 'Mixed Practice' : modeNames[mode]} ✓`
           : (mode === 'mixed' ? 'Mixed Practice' : modeNames[mode]);
@@ -3301,28 +3332,50 @@
     function showModeClearedScreen(mode){
       gameGrid.style.display = 'none';
       endScreen.classList.add('show');
+
+      const nextRequired = getNextRequiredMode();
       const remaining = JOURNEY_TARGET - journeyProgress;
-      endText.textContent = remaining > 0
-        ? `${modeNames[mode]} is cleared. Choose another mode to continue. ${remaining} question(s) left before your next pet evolution!`
-        : `All 9 questions are done.`;
+
+      if(remaining <= 0){
+        restartBtn.textContent = 'Finish Journey';
+        backMixedBtn.disabled = false;
+        endText.textContent = 'All 9 questions are done.';
+        return;
+      }
+
+      restartBtn.textContent = nextRequired === 'mixed'
+        ? 'Start Mixed Practice'
+        : `Start ${modeNames[nextRequired]}`;
+
+      backMixedBtn.disabled = !isModeUnlocked('mixed');
+
+      endText.textContent = `${modeNames[mode]} is cleared. Next: ${modeNames[nextRequired]}. ${remaining} question(s) left before your next pet evolution!`;
     }
 
     function startMode(mode){
+      const requestedMode = mode;
+      if(!isModeUnlocked(requestedMode)){
+        mode = getNextRequiredMode();
+      }
+
       currentMode = mode;
       queue = modeQueues[mode] || [];
       currentIndex = Math.min(modeProgress[mode] || 0, Math.max(queue.length - 1, 0));
       rewardScreen.classList.remove('show');
       endScreen.classList.remove('show');
+
       if(journeyProgress >= JOURNEY_TARGET){
         showRewardScreen();
         return;
       }
+
       if((modeProgress[mode] || 0) >= queue.length){
         updatePills();
         updateMissionCard();
         showModeClearedScreen(mode);
         return;
       }
+
       gameGrid.style.display = 'grid';
       renderQuestion();
       updatePills();
@@ -3791,8 +3844,22 @@
       btn.addEventListener('click', () => startMode(btn.dataset.mode));
     });
 
-    document.getElementById('restartBtn').addEventListener('click', () => startMode('type1'));
-    document.getElementById('backMixedBtn').addEventListener('click', () => startMode('mixed'));
+    document.getElementById('restartBtn').addEventListener('click', () => {
+      if(journeyProgress >= JOURNEY_TARGET){
+        signalStageComplete(7);
+        return;
+      }
+      startMode(getNextRequiredMode());
+    });
+
+    document.getElementById('backMixedBtn').addEventListener('click', () => {
+      if(isModeUnlocked('mixed')){
+        startMode('mixed');
+      }else{
+        startMode(getNextRequiredMode());
+      }
+    });
+
     document.getElementById('rewardPlayAgain').addEventListener('click', () => signalStageComplete(7));
     document.getElementById('rewardBackMixed').addEventListener('click', () => {
       clearTimeout(stageCompleteTimer);
