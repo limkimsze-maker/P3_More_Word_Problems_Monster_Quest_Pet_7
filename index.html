@@ -2127,6 +2127,76 @@
     }
   </style>
 
+
+  <style id="tool-space-fix-patch">
+    /* Save space in the middle panel for all types */
+    #toolCard{
+      min-height: auto !important;
+    }
+
+    #toolCard .tool-shell{
+      display: grid !important;
+      grid-template-rows: auto minmax(0,1fr) !important;
+      align-content: start !important;
+      gap: 8px !important;
+      min-height: 0 !important;
+      flex: 1 1 auto !important;
+    }
+
+    #toolCard .tool-shell > .subpanel:first-child{
+      align-self: start !important;
+      height: auto !important;
+      min-height: 0 !important;
+      padding-bottom: 8px !important;
+    }
+
+    #toolCard .tool-shell > .equation-wrap{
+      align-self: stretch !important;
+      min-height: 0 !important;
+      height: auto !important;
+      align-content: start !important;
+    }
+
+    #toolCard .toolbox{
+      gap: 8px !important;
+    }
+
+    #toolCard .tool-row{
+      gap: 8px !important;
+      margin: 0 !important;
+    }
+
+    #toolCard .subpanel{
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+    }
+
+    #toolCard .btn-row{
+      gap: 8px !important;
+      margin-top: 0 !important;
+    }
+
+    /* Slightly tighten the equation area too so the action buttons fit for Type 3 */
+    #toolCard .eq-card{
+      padding: 10px !important;
+      gap: 8px !important;
+    }
+
+    #toolCard .eq-line{
+      line-height: 1.14 !important;
+      margin: 0 !important;
+    }
+
+    #toolCard .feedback{
+      min-height: 34px !important;
+      padding: 8px 10px !important;
+    }
+
+    #toolCard .celebrate{
+      margin-top: 0 !important;
+    }
+  </style>
+
 </head>
 <body>
 <a class="back-main-btn"
