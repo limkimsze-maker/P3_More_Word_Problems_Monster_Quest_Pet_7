@@ -2422,7 +2422,7 @@
       </div>
       <div class="btn-row" style="justify-content:center">
         <button class="btn primary" id="rewardPlayAgain">Next</button>
-        <button class="btn secondary" id="rewardBackMixed">Play Again</button>
+        <button class="btn secondary" id="rewardBackMixed">Play Full Journey Again</button>
       </div>
     </section>
 
@@ -2431,7 +2431,7 @@
       <p id="endText"></p>
       <div class="btn-row" style="justify-content:center">
         <button class="btn primary" id="restartBtn">Choose Type 1</button>
-        <button class="btn secondary" id="backMixedBtn">Play Again</button>
+        <button class="btn secondary" id="backMixedBtn">Continue</button>
       </div>
     </section>
 
@@ -2746,28 +2746,27 @@
       MQ_STAGE_PARAMS.get('tryany') === '1' ||
       MQ_STAGE_PARAMS.get('practice') === '1';
 
-    const MODE_TARGETS = { type1: 2, type2: 2, type3: 2, mixed: 3 };
-    const JOURNEY_TARGET = 9;
+    const MODE_TARGETS = { type1: 2, type2: 2, type3: 2 };
+    const JOURNEY_TARGET = 6;
     let currentMode = 'type1';
     let queue = [];
     let currentIndex = 0;
     let score = 0;
     let journeyProgress = 0;
-    let modeProgress = { type1: 0, type2: 0, type3: 0, mixed: 0 };
-    let modeQueues = { type1: [], type2: [], type3: [], mixed: [] };
+    let modeProgress = { type1: 0, type2: 0, type3: 0 };
+    let modeQueues = { type1: [], type2: [], type3: [] };
     let solved = false;
     let modelState = { top: 0, bottom: 0 };
     let dragState = null;
     let labelState = { top:false, bottom:false };
 
     const modeNames = {
-      mixed: 'Mixed',
       type1: 'Type 1',
       type2: 'Type 2',
       type3: 'Type 3'
     };
 
-    const MODE_FLOW = ['type1','type2','type3','mixed'];
+    const MODE_FLOW = ['type1','type2','type3'];
 
     function modeIsCleared(mode){
       return (modeProgress[mode] || 0) >= ((modeQueues[mode] && modeQueues[mode].length) || MODE_TARGETS[mode]);
@@ -2784,7 +2783,7 @@
     }
 
     function getNextRequiredMode(){
-      return MODE_FLOW.find(mode => !modeIsCleared(mode)) || 'mixed';
+      return MODE_FLOW.find(mode => !modeIsCleared(mode)) || null;
     }
 
     const modeButtons = Array.from(document.querySelectorAll('.mode-btn'));
@@ -2979,14 +2978,7 @@
     }
 
     function getModeQuestions(mode){
-      if(mode === 'mixed'){
-        return shuffle([
-          shuffle(QUESTION_BANK.type1)[0],
-          shuffle(QUESTION_BANK.type2)[0],
-          shuffle(QUESTION_BANK.type3)[0]
-        ]);
-      }
-      return shuffle(QUESTION_BANK[mode]).slice(0, MODE_TARGETS[mode]);
+      return shuffle(QUESTION_BANK[mode] || []).slice(0, MODE_TARGETS[mode] || 2);
     }
 
     function usesDragLabels(q){
@@ -3442,12 +3434,11 @@
     function initJourney(){
       score = 0;
       journeyProgress = 0;
-      modeProgress = { type1: 0, type2: 0, type3: 0, mixed: 0 };
+      modeProgress = { type1: 0, type2: 0, type3: 0 };
       modeQueues = {
         type1: getModeQuestions('type1'),
         type2: getModeQuestions('type2'),
-        type3: getModeQuestions('type3'),
-        mixed: getModeQuestions('mixed')
+        type3: getModeQuestions('type3')
       };
     }
 
@@ -3458,19 +3449,15 @@
       const nextRequired = getNextRequiredMode();
       const remaining = JOURNEY_TARGET - journeyProgress;
 
-      if(remaining <= 0){
+      if(remaining <= 0 || !nextRequired){
         restartBtn.textContent = 'Finish Journey';
         backMixedBtn.disabled = false;
-        endText.textContent = 'All 9 questions are done.';
+        endText.textContent = 'All 6 questions are done. Press Finish Journey to unlock Pet 7.';
         return;
       }
 
-      restartBtn.textContent = nextRequired === 'mixed'
-        ? 'Start Mixed Practice'
-        : `Start ${modeNames[nextRequired]}`;
-
-      backMixedBtn.disabled = !isModeUnlocked('mixed');
-
+      restartBtn.textContent = `Start ${modeNames[nextRequired]}`;
+      backMixedBtn.disabled = false;
       endText.textContent = `${modeNames[mode]} is cleared. Next: ${modeNames[nextRequired]}. ${remaining} question(s) left before your next pet evolution!`;
     }
 
@@ -3478,6 +3465,10 @@
       const requestedMode = mode;
       if(!isModeUnlocked(requestedMode)){
         mode = getNextRequiredMode();
+        if(!mode){
+          showRewardScreen();
+          return;
+        }
       }
 
       currentMode = mode;
@@ -3796,10 +3787,10 @@
       gameGrid.style.display = 'none';
       endScreen.classList.remove('show');
       rewardScreen.classList.add('show');
-      rewardTitle.textContent = IS_FREE_PRACTICE ? 'Free Practice Complete!' : 'Stage 7 unlocked!';
+      rewardTitle.textContent = IS_FREE_PRACTICE ? 'Free Practice Complete!' : 'Pet 7 unlocked!';
       rewardText.textContent = IS_FREE_PRACTICE
         ? 'You completed the free-practice set. This did not change the Monster Quest journey progress.'
-        : 'You completed all 9 questions across Type 1, Type 2, Type 3 and Mixed Practice.';
+        : 'You completed all 6 questions across Type 1, Type 2 and Type 3.';
       progressPill.textContent = `Finished ${JOURNEY_TARGET} / ${JOURNEY_TARGET}`;
       updateMissionCard();
       playTadaSound();
@@ -3987,7 +3978,7 @@
     });
 
     document.getElementById('restartBtn').addEventListener('click', () => {
-      if(journeyProgress >= JOURNEY_TARGET){
+      if(journeyProgress >= JOURNEY_TARGET || !getNextRequiredMode()){
         signalStageComplete(7);
         return;
       }
@@ -3995,18 +3986,17 @@
     });
 
     document.getElementById('backMixedBtn').addEventListener('click', () => {
-      if(isModeUnlocked('mixed')){
-        startMode('mixed');
-      }else{
-        startMode(getNextRequiredMode());
-      }
+      const nextRequired = getNextRequiredMode();
+      if(nextRequired) startMode(nextRequired);
+      else signalStageComplete(7);
     });
 
     document.getElementById('rewardPlayAgain').addEventListener('click', () => signalStageComplete(7));
     document.getElementById('rewardBackMixed').addEventListener('click', () => {
       clearTimeout(stageCompleteTimer);
       stageCompleteSent = false;
-      startMode('mixed');
+      initJourney();
+      startMode('type1');
     });
 
     const fitStage = document.getElementById('fitStage');
@@ -4081,6 +4071,21 @@
   window.addEventListener('load', removeMixed);
   document.addEventListener('DOMContentLoaded', removeMixed);
   removeMixed();
+})();
+</script>
+
+
+<script id="stage7-final-no-mixed-and-completion-patch">
+(function(){
+  function cleanStage7Mixed(){
+    document.querySelectorAll('[data-mode="mixed"]').forEach(function(el){ el.remove(); });
+    document.querySelectorAll('.mode-btn').forEach(function(btn){
+      if((btn.textContent || '').toLowerCase().includes('mixed')) btn.remove();
+    });
+  }
+  document.addEventListener('DOMContentLoaded', cleanStage7Mixed);
+  window.addEventListener('load', cleanStage7Mixed);
+  cleanStage7Mixed();
 })();
 </script>
 
