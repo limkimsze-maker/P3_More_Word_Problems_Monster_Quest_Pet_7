@@ -2197,6 +2197,7 @@
     }
   </style>
 
+<!-- Stage 7 completion auto-signal patch: records completion on reward screen so main page can show pet 7 and unlock stage 8. -->
 </head>
 <body>
 <a class="back-main-btn" href="#" data-stage-return="7">
@@ -3790,12 +3791,18 @@
       rewardTitle.textContent = IS_FREE_PRACTICE ? 'Free Practice Complete!' : 'Pet 7 unlocked!';
       rewardText.textContent = IS_FREE_PRACTICE
         ? 'You completed the free-practice set. This did not change the Monster Quest journey progress.'
-        : 'You completed all 6 questions across Type 1, Type 2 and Type 3.';
+        : 'You completed all 6 questions across Type 1, Type 2 and Type 3. Stage 8 is now unlocked.';
       progressPill.textContent = `Finished ${JOURNEY_TARGET} / ${JOURNEY_TARGET}`;
       updateMissionCard();
       playTadaSound();
+
+      // Stage 7 is now complete. Tell the main page so it can show the Stage 7 pet
+      // picture and unlock Stage 8. Free Practice still does not change journey progress.
       clearTimeout(stageCompleteTimer);
       stageCompleteSent = false;
+      if(!IS_FREE_PRACTICE){
+        queueStageComplete(7, 1200);
+      }
     }
 
     function nextQuestion(){
