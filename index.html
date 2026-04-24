@@ -2199,10 +2199,41 @@
 
 </head>
 <body>
-<a class="back-main-btn"
-   href="https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/">
+<a class="back-main-btn" href="#" data-stage-return="7">
   Back to Main Page
 </a>
+
+<script>
+(function(){
+  const STAGE_NUMBER = 7;
+  const MAIN_URL = "https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/";
+
+  function returnToMainPage(){
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({
+          type: "monster-quest-return-main",
+          stage: STAGE_NUMBER,
+          reason: "manual-back"
+        }, "*");
+        return false;
+      }
+    } catch(e) {}
+
+    // Fallback only when this stage is opened directly, not inside the main page iframe.
+    window.location.href = MAIN_URL + "?mq_return=stage" + STAGE_NUMBER + "&reason=manual&ts=" + Date.now();
+    return false;
+  }
+
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest && e.target.closest(".back-main-btn");
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    returnToMainPage();
+  }, true);
+})();
+</script>
 
   <div class="fit-viewport" id="fitViewport">
     <div class="fit-stage" id="fitStage">
@@ -3479,6 +3510,7 @@
     function signalStageComplete(stageNumber){
       if(stageCompleteSent) return;
       stageCompleteSent = true;
+
       try {
         const key = 'monsterQuest_highestCompleted';
         const current = Number(localStorage.getItem(key) || 0);
@@ -3497,15 +3529,9 @@
         }
       } catch (e) {}
 
-      try {
-        const hubCandidates = [
-          './monster-quest-stage-hub-return-to-map.html?completed=' + stageNumber,
-          './monster-quest-stage-hub.html?completed=' + stageNumber,
-          '../monster-quest-stage-hub-return-to-map.html?completed=' + stageNumber,
-          '../monster-quest-stage-hub.html?completed=' + stageNumber
-        ];
-        window.location.href = hubCandidates[0];
-      } catch (e) {}
+      window.location.href =
+        'https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/?completed='
+        + stageNumber + '&ts=' + Date.now();
     }
 
     function queueStageComplete(stageNumber, delayMs){
