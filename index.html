@@ -2254,7 +2254,6 @@
         <button class="mode-btn active" data-mode="type1">Type 1</button>
         <button class="mode-btn" data-mode="type2">Type 2</button>
         <button class="mode-btn" data-mode="type3">Type 3</button>
-        <button class="mode-btn" data-mode="mixed">Mixed Practice</button>
       </div>
 
       <div class="mission-card" id="missionCard">
@@ -2423,7 +2422,7 @@
       </div>
       <div class="btn-row" style="justify-content:center">
         <button class="btn primary" id="rewardPlayAgain">Next</button>
-        <button class="btn secondary" id="rewardBackMixed">Go to Mixed Practice</button>
+        <button class="btn secondary" id="rewardBackMixed">Play Again</button>
       </div>
     </section>
 
@@ -2432,7 +2431,7 @@
       <p id="endText"></p>
       <div class="btn-row" style="justify-content:center">
         <button class="btn primary" id="restartBtn">Choose Type 1</button>
-        <button class="btn secondary" id="backMixedBtn">Go to Mixed Practice</button>
+        <button class="btn secondary" id="backMixedBtn">Play Again</button>
       </div>
     </section>
 
@@ -4070,5 +4069,20 @@
     }
     setTimeout(requestViewportFit, 120);
   </script>
+
+<script id="stage7-remove-mixed-practice-defensive-patch">
+(function(){
+  function removeMixed(){
+    document.querySelectorAll('[data-mode="mixed"]').forEach(function(el){ el.remove(); });
+    document.querySelectorAll('.mode-btn').forEach(function(btn){
+      if((btn.textContent || '').toLowerCase().includes('mixed')) btn.remove();
+    });
+  }
+  window.addEventListener('load', removeMixed);
+  document.addEventListener('DOMContentLoaded', removeMixed);
+  removeMixed();
+})();
+</script>
+
 </body>
 </html>
