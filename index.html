@@ -2416,7 +2416,7 @@
     <section class="card reward-screen" id="rewardScreen">
       <div class="reward-badge">⭐ Journey Complete</div>
       <h2 id="rewardTitle">Prince Hullabaloo!</h2>
-      <p id="rewardText">You finished all 9 questions in the full journey.</p>
+      <p id="rewardText">You finished all 6 questions in the full journey.</p>
       <div class="reward-pet-wrap">
         <img src="https://raw.githubusercontent.com/limkimsze-maker/P3_More_Word_Problems_Monster_Quest_Pet_7/afc0b3cb434b6df35ea4bb981ac2936dcc76e3ec/7%20pet.png" alt="Stage 7 Pet">
         <div class="reward-remark">It transforms into a more regal form with armour and a staff.</div>
@@ -3285,8 +3285,8 @@
           ? 'Try Any Topic: unlocked for free practice'
           : (unlocked ? '' : `Complete ${modeNames[MODE_FLOW[MODE_FLOW.indexOf(mode)-1]]} first`);
         btn.textContent = done
-          ? `${mode === 'mixed' ? 'Mixed Practice' : modeNames[mode]} ✓`
-          : (mode === 'mixed' ? 'Mixed Practice' : modeNames[mode]);
+          ? `${mode === 'mixed' ? 'Practice' : modeNames[mode]} ✓`
+          : (mode === 'mixed' ? 'Practice' : modeNames[mode]);
       });
     }
 
@@ -3437,10 +3437,11 @@
       journeyProgress = 0;
       modeProgress = { type1: 0, type2: 0, type3: 0 };
       modeQueues = {
-        type1: getModeQuestions('type1'),
-        type2: getModeQuestions('type2'),
-        type3: getModeQuestions('type3')
+        type1: shuffle(QUESTION_BANK.type1 || []).slice(0,2),
+        type2: shuffle(QUESTION_BANK.type2 || []).slice(0,2),
+        type3: shuffle(QUESTION_BANK.type3 || []).slice(0,2)
       };
+    };
     }
 
     function showModeClearedScreen(mode){
@@ -4093,6 +4094,21 @@
   document.addEventListener('DOMContentLoaded', cleanStage7Mixed);
   window.addEventListener('load', cleanStage7Mixed);
   cleanStage7Mixed();
+})();
+</script>
+
+
+<script id="stage7-2-each-final-safety-patch">
+(function(){
+  function cleanStage7(){
+    document.querySelectorAll('[data-mode="mixed"]').forEach(function(el){ el.remove(); });
+    document.querySelectorAll('.mode-btn').forEach(function(btn){
+      if((btn.textContent || '').toLowerCase().includes('mixed')) btn.remove();
+    });
+  }
+  document.addEventListener('DOMContentLoaded', cleanStage7);
+  window.addEventListener('load', cleanStage7);
+  cleanStage7();
 })();
 </script>
 
