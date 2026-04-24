@@ -2738,6 +2738,15 @@
 
     const ALL_QUESTIONS = [...QUESTION_BANK.type1, ...QUESTION_BANK.type2, ...QUESTION_BANK.type3];
 
+    // Free-Practice Auto Unlock: when this stage is opened from the main page's
+    // "Try Any Topic" route, all internal mode buttons are available, but this
+    // does not update Monster Quest journey progress on the main map.
+    const MQ_STAGE_PARAMS = new URLSearchParams(window.location.search || '');
+    const IS_FREE_PRACTICE =
+      MQ_STAGE_PARAMS.get('freepractice') === '1' ||
+      MQ_STAGE_PARAMS.get('tryany') === '1' ||
+      MQ_STAGE_PARAMS.get('practice') === '1';
+
     const MODE_TARGETS = { type1: 2, type2: 2, type3: 2, mixed: 3 };
     const JOURNEY_TARGET = 9;
     let currentMode = 'type1';
@@ -2766,6 +2775,7 @@
     }
 
     function isModeUnlocked(mode){
+      if(IS_FREE_PRACTICE) return true;
       const idx = MODE_FLOW.indexOf(mode);
       if(idx <= 0) return true;
       for(let i = 0; i < idx; i++){
@@ -3267,9 +3277,9 @@
     }
 
     function updatePills(){
-      modePill.textContent = `Mode: ${modeNames[currentMode]}`;
+      modePill.textContent = IS_FREE_PRACTICE ? `Try Any Topic: ${modeNames[currentMode]}` : `Mode: ${modeNames[currentMode]}`;
       progressPill.textContent = `Question ${Math.min(currentIndex + 1, Math.max(queue.length,1))} / ${Math.max(queue.length,1)}`;
-      scorePill.textContent = `Score: ${score} / ${JOURNEY_TARGET}`;
+      scorePill.textContent = IS_FREE_PRACTICE ? `Practice Score: ${score}` : `Score: ${score} / ${JOURNEY_TARGET}`;
     }
 
     function updateModeButtons(){
@@ -3279,7 +3289,9 @@
         const unlocked = isModeUnlocked(mode);
         btn.classList.toggle('active', mode === currentMode);
         btn.disabled = !unlocked;
-        btn.title = unlocked ? '' : `Complete ${modeNames[MODE_FLOW[MODE_FLOW.indexOf(mode)-1]]} first`;
+        btn.title = IS_FREE_PRACTICE
+          ? 'Try Any Topic: unlocked for free practice'
+          : (unlocked ? '' : `Complete ${modeNames[MODE_FLOW[MODE_FLOW.indexOf(mode)-1]]} first`);
         btn.textContent = done
           ? `${mode === 'mixed' ? 'Mixed Practice' : modeNames[mode]} ✓`
           : (mode === 'mixed' ? 'Mixed Practice' : modeNames[mode]);
@@ -3288,6 +3300,16 @@
 
     function updateMissionCard(){
       const currentQuestionNo = Math.min(currentIndex + 1, Math.max(queue.length, 1));
+      if(IS_FREE_PRACTICE){
+        const doneInMode = Math.min(modeProgress[currentMode] || 0, Math.max(queue.length, 1));
+        missionTitle.textContent = `Try Any Topic: ${modeNames[currentMode]} unlocked`;
+        missionMeta.textContent = `Free practice • Question ${currentQuestionNo} of ${Math.max(queue.length,1)}`;
+        missionFill.style.width = `${(doneInMode / Math.max(queue.length, 1)) * 100}%`;
+        missionStreakEl.textContent = `Practice progress: ${doneInMode} of ${Math.max(queue.length,1)} in this type`;
+        missionStars.forEach((star, idx) => star.classList.toggle('on', idx < doneInMode));
+        updateModeButtons();
+        return;
+      }
       missionTitle.textContent = `Pet Journey: ${journeyProgress} of ${JOURNEY_TARGET}`;
       missionMeta.textContent = `Current mode: ${modeNames[currentMode]} • Question ${currentQuestionNo} of ${Math.max(queue.length,1)}`;
       missionFill.style.width = `${(journeyProgress / JOURNEY_TARGET) * 100}%`;
@@ -3461,16 +3483,19 @@
 
       currentMode = mode;
       queue = modeQueues[mode] || [];
+      if(IS_FREE_PRACTICE && (modeProgress[mode] || 0) >= queue.length){
+        modeProgress[mode] = 0; // choosing a completed type again restarts it in Try Any Topic
+      }
       currentIndex = Math.min(modeProgress[mode] || 0, Math.max(queue.length - 1, 0));
       rewardScreen.classList.remove('show');
       endScreen.classList.remove('show');
 
-      if(journeyProgress >= JOURNEY_TARGET){
+      if(!IS_FREE_PRACTICE && journeyProgress >= JOURNEY_TARGET){
         showRewardScreen();
         return;
       }
 
-      if((modeProgress[mode] || 0) >= queue.length){
+      if(!IS_FREE_PRACTICE && (modeProgress[mode] || 0) >= queue.length){
         updatePills();
         updateMissionCard();
         showModeClearedScreen(mode);
@@ -3510,6 +3535,23 @@
     function signalStageComplete(stageNumber){
       if(stageCompleteSent) return;
       stageCompleteSent = true;
+
+      if(IS_FREE_PRACTICE){
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+              type: 'monster-quest-return-main',
+              stage: stageNumber,
+              reason: 'free-practice-complete'
+            }, '*');
+            return;
+          }
+        } catch (e) {}
+        window.location.href =
+          'https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/?mq_return=stage'
+          + stageNumber + '&reason=freepractice&ts=' + Date.now();
+        return;
+      }
 
       try {
         const key = 'monsterQuest_highestCompleted';
@@ -3715,7 +3757,9 @@
       if(modelCorrect && blanksCorrect){
         if(!solved){
           score += 1;
-          journeyProgress = Math.min(JOURNEY_TARGET, journeyProgress + 1);
+          if(!IS_FREE_PRACTICE){
+            journeyProgress = Math.min(JOURNEY_TARGET, journeyProgress + 1);
+          }
           solved = true;
         }
         updatePills();
@@ -3753,8 +3797,10 @@
       gameGrid.style.display = 'none';
       endScreen.classList.remove('show');
       rewardScreen.classList.add('show');
-      rewardTitle.textContent = 'Stage 7 unlocked!';
-      rewardText.textContent = 'You completed all 9 questions across Type 1, Type 2, Type 3 and Mixed Practice.';
+      rewardTitle.textContent = IS_FREE_PRACTICE ? 'Free Practice Complete!' : 'Stage 7 unlocked!';
+      rewardText.textContent = IS_FREE_PRACTICE
+        ? 'You completed the free-practice set. This did not change the Monster Quest journey progress.'
+        : 'You completed all 9 questions across Type 1, Type 2, Type 3 and Mixed Practice.';
       progressPill.textContent = `Finished ${JOURNEY_TARGET} / ${JOURNEY_TARGET}`;
       updateMissionCard();
       playTadaSound();
