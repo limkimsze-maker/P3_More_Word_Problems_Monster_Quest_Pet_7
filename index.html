@@ -3101,17 +3101,30 @@
       const topRect = dropTop.getBoundingClientRect();
       const bottomRect = dropBottom.getBoundingClientRect();
 
-      const overshootTop = 0;
-      const overshootBottom = 10;
       const anchorWidth = 92;
       const braceWidth = 22;
       const edgeInset = 2;
 
-      const rawTop = Math.round(topRect.top - areaRect.top) - overshootTop;
-      const rawBottom = Math.round(bottomRect.bottom - areaRect.top) + overshootBottom;
+      let rawTop;
+      let rawBottom;
+      let minAnchorHeight;
+
+      if(q.type === 1){
+        // Type 1: make the right total bracket shorter and neater.
+        // It now starts nearer the first bar and ends facing the lower bar,
+        // instead of stretching too far above and below the model.
+        rawTop = Math.round((topRect.top - areaRect.top) + (topRect.height * 0.42));
+        rawBottom = Math.round((bottomRect.top - areaRect.top) + (bottomRect.height * 0.58));
+        minAnchorHeight = 92;
+      }else{
+        rawTop = Math.round(topRect.top - areaRect.top);
+        rawBottom = Math.round(bottomRect.bottom - areaRect.top) + 10;
+        minAnchorHeight = 156;
+      }
+
       const anchorTop = Math.max(0, rawTop);
       const anchorBottom = Math.min(areaEl.offsetHeight, rawBottom);
-      const anchorHeight = Math.max(anchorBottom - anchorTop, 156);
+      const anchorHeight = Math.max(anchorBottom - anchorTop, minAnchorHeight);
       const anchorLeft = Math.max(0, areaEl.offsetWidth - anchorWidth - edgeInset);
 
       type3SideAnchor.style.left = `${anchorLeft}px`;
@@ -3125,7 +3138,7 @@
       type3SideBrace.style.width = `${braceWidth}px`;
       type3SideBrace.style.height = `${anchorHeight}px`;
 
-      type3SideLabelTarget.style.left = `${braceLeft + braceWidth + 6}px`;
+      type3SideLabelTarget.style.left = `${braceLeft + braceWidth + 8}px`;
       type3SideLabelTarget.style.top = `${Math.round((anchorHeight / 2) - (targetHeight / 2))}px`;
 
       updateSideBraceSvg(type3SideBrace);
