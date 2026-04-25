@@ -2198,6 +2198,22 @@
   </style>
 
 <!-- Stage 7 completion auto-signal patch: records completion on reward screen so main page can show pet 7 and unlock stage 8. -->
+
+  <style id="side-bracket-red-reference-position-patch">
+    /* Place the right-side total bracket neatly beside the bars for Type 1, Type 2 and Type 3. */
+    .type3-side-anchor{
+      width:104px !important;
+      overflow:visible !important;
+    }
+    .type3-side-brace-wrap{
+      width:26px !important;
+      overflow:visible !important;
+    }
+    .type3-side-label-target{
+      z-index:4 !important;
+    }
+  </style>
+
 </head>
 <body>
 <a class="back-main-btn" href="#" data-stage-return="7">
@@ -3101,38 +3117,34 @@
       const topRect = dropTop.getBoundingClientRect();
       const bottomRect = dropBottom.getBoundingClientRect();
 
-      const anchorWidth = 92;
-      const braceWidth = 22;
+      /*
+        Side total bracket layout for ALL types:
+        - bracket starts beside the first/top bar
+        - bracket ends beside the lower bar
+        - answer box is centred vertically on the bracket
+        This matches the red bracket position shown in the reference picture.
+      */
+      const anchorWidth = 104;
+      const braceWidth = 26;
+      const braceLeft = 0;
+      const gapFromBars = 6;
       const edgeInset = 2;
 
-      let rawTop;
-      let rawBottom;
-      let minAnchorHeight;
-
-      if(q.type === 1){
-        // Type 1: make the right total bracket shorter and neater.
-        // It now starts nearer the first bar and ends facing the lower bar,
-        // instead of stretching too far above and below the model.
-        rawTop = Math.round((topRect.top - areaRect.top) + (topRect.height * 0.42));
-        rawBottom = Math.round((bottomRect.top - areaRect.top) + (bottomRect.height * 0.58));
-        minAnchorHeight = 92;
-      }else{
-        rawTop = Math.round(topRect.top - areaRect.top);
-        rawBottom = Math.round(bottomRect.bottom - areaRect.top) + 10;
-        minAnchorHeight = 156;
-      }
-
+      const rawTop = Math.round((topRect.top - areaRect.top) + (topRect.height * 0.08));
+      const rawBottom = Math.round((bottomRect.bottom - areaRect.top) - (bottomRect.height * 0.08));
       const anchorTop = Math.max(0, rawTop);
       const anchorBottom = Math.min(areaEl.offsetHeight, rawBottom);
-      const anchorHeight = Math.max(anchorBottom - anchorTop, minAnchorHeight);
-      const anchorLeft = Math.max(0, areaEl.offsetWidth - anchorWidth - edgeInset);
+      const anchorHeight = Math.max(anchorBottom - anchorTop, 86);
+
+      const barsRight = Math.max(topRect.right, bottomRect.right) - areaRect.left;
+      const desiredAnchorLeft = Math.round(barsRight + gapFromBars - braceLeft);
+      const anchorLeft = Math.max(0, Math.min(areaEl.offsetWidth - anchorWidth - edgeInset, desiredAnchorLeft));
 
       type3SideAnchor.style.left = `${anchorLeft}px`;
       type3SideAnchor.style.top = `${anchorTop}px`;
       type3SideAnchor.style.width = `${anchorWidth}px`;
       type3SideAnchor.style.height = `${anchorHeight}px`;
 
-      const braceLeft = 8;
       type3SideBrace.style.left = `${braceLeft}px`;
       type3SideBrace.style.top = `0px`;
       type3SideBrace.style.width = `${braceWidth}px`;
