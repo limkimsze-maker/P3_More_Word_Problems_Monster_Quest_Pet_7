@@ -2700,25 +2700,30 @@
 
   html.mq-stage7-phone .model-area{
     width:100% !important;
-    margin-top:10px !important;
-    padding-right:0 !important;
-    padding-bottom:12px !important;
-    gap:8px !important;
+    margin-top:8px !important;
+    padding-bottom:8px !important;
+    gap:4px !important;
   }
 
+  /* Keep the name beside its bar instead of floating above it. */
   html.mq-stage7-phone .model-row{
-    grid-template-columns:1fr !important;
-    gap:6px !important;
+    grid-template-columns:92px minmax(0,1fr) !important;
+    column-gap:8px !important;
+    row-gap:0 !important;
     width:100% !important;
+    align-items:center !important;
   }
 
   html.mq-stage7-phone .row-label{
-    width:max-content !important;
-    max-width:100% !important;
-    min-height:40px !important;
-    margin-top:0 !important;
-    padding:7px 10px !important;
-    font-size:18px !important;
+    width:92px !important;
+    max-width:92px !important;
+    min-height:42px !important;
+    margin:0 !important;
+    padding:7px 6px !important;
+    font-size:17px !important;
+    line-height:1.15 !important;
+    align-self:center !important;
+    text-align:center !important;
   }
 
   html.mq-stage7-phone .drop-shell,
@@ -2728,13 +2733,31 @@
     min-width:0 !important;
   }
 
+  /* Enough room for the top label/brace, without the large empty gaps. */
   html.mq-stage7-phone .annot-wrap{
-    min-height:122px !important;
+    min-height:104px !important;
+    padding-top:28px !important;
+    padding-bottom:24px !important;
   }
 
   html.mq-stage7-phone .drop-zone{
-    min-height:62px !important;
-    padding:10px 6px !important;
+    min-height:54px !important;
+    padding:7px 5px !important;
+    border-radius:14px !important;
+  }
+
+  /* Reserve a slim lane at the right for the whole/total bracket. */
+  html.mq-stage7-phone .model-area.side-total-layout,
+  html.mq-stage7-phone .model-area.type3-layout{
+    padding-right:70px !important;
+  }
+
+  html.mq-stage7-phone .label-target,
+  html.mq-stage7-phone .type3-side-label-target{
+    width:58px !important;
+    min-width:58px !important;
+    height:32px !important;
+    min-height:32px !important;
   }
 
   html.mq-stage7-phone .model-area.type1-layout > .model-row:nth-of-type(2),
@@ -2744,13 +2767,18 @@
   }
 
   html.mq-stage7-phone .type3-partwhole{
-    padding:12px 4px 8px !important;
+    padding:8px 0 4px !important;
+    margin-top:4px !important;
+  }
+
+  html.mq-stage7-phone .type3-partwhole .model-row{
+    grid-template-columns:92px minmax(0,1fr) !important;
   }
 
   html.mq-stage7-phone .type3-whole-block,
   html.mq-stage7-phone .type3-partwhole-labels{
-    width:calc(100% - 20px) !important;
-    margin-left:10px !important;
+    width:100% !important;
+    margin-left:0 !important;
   }
 
   html.mq-stage7-phone .tool-shell,
@@ -2875,7 +2903,11 @@
   }
 
   html.mq-stage7-phone .back-main-btn{
+    right:8px !important;
     bottom:calc(84px + env(safe-area-inset-bottom)) !important;
+    padding:5px 9px !important;
+    font-size:10px !important;
+    opacity:.88 !important;
   }
 
   html.mq-stage7-phone footer{
@@ -3794,19 +3826,21 @@
         - bracket starts beside the first/top bar
         - bracket ends beside the lower bar
         - answer box is centred vertically on the bracket
-        This matches the red bracket position shown in the reference picture.
       */
-      const anchorWidth = 104;
-      const braceWidth = 26;
+      const isPhone = document.documentElement.classList.contains('mq-stage7-phone');
+      const anchorWidth = isPhone ? 66 : 104;
+      const braceWidth = isPhone ? 20 : 26;
       const braceLeft = 0;
-      const gapFromBars = 6;
+      const gapFromBars = isPhone ? 4 : 6;
       const edgeInset = 2;
 
       const rawTop = Math.round((topRect.top - areaRect.top) + (topRect.height * 0.08));
-      const rawBottom = Math.round((bottomRect.bottom - areaRect.top) - 110);
+      const rawBottom = isPhone
+        ? Math.round((bottomRect.bottom - areaRect.top) - (bottomRect.height * 0.08))
+        : Math.round((bottomRect.bottom - areaRect.top) - 110);
       const anchorTop = Math.max(0, rawTop);
       const anchorBottom = Math.min(areaEl.offsetHeight, rawBottom);
-      const anchorHeight = Math.max(anchorBottom - anchorTop, 86);
+      const anchorHeight = Math.max(anchorBottom - anchorTop, isPhone ? 74 : 86);
 
       const barsRight = Math.max(topRect.right, bottomRect.right) - areaRect.left;
       const desiredAnchorLeft = Math.round(barsRight + gapFromBars - braceLeft);
