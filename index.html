@@ -2735,9 +2735,9 @@
 
   /* Enough room for the top label/brace, without the large empty gaps. */
   html.mq-stage7-phone .annot-wrap{
-    min-height:104px !important;
-    padding-top:28px !important;
-    padding-bottom:24px !important;
+    min-height:126px !important;
+    padding-top:62px !important;
+    padding-bottom:10px !important;
   }
 
   html.mq-stage7-phone .drop-zone{
@@ -2746,18 +2746,23 @@
     border-radius:14px !important;
   }
 
-  /* Reserve a slim lane at the right for the whole/total bracket. */
+  /* Reserve enough room for the whole/total bracket AND its answer box. */
   html.mq-stage7-phone .model-area.side-total-layout,
   html.mq-stage7-phone .model-area.type3-layout{
-    padding-right:70px !important;
+    padding-right:96px !important;
   }
 
   html.mq-stage7-phone .label-target,
   html.mq-stage7-phone .type3-side-label-target{
-    width:58px !important;
-    min-width:58px !important;
+    width:56px !important;
+    min-width:56px !important;
     height:32px !important;
     min-height:32px !important;
+  }
+
+  html.mq-stage7-phone .brace-path,
+  html.mq-stage7-phone .type3-side-brace-path{
+    stroke-width:2.2 !important;
   }
 
   html.mq-stage7-phone .model-area.type1-layout > .model-row:nth-of-type(2),
@@ -2903,11 +2908,13 @@
   }
 
   html.mq-stage7-phone .back-main-btn{
-    right:8px !important;
-    bottom:calc(84px + env(safe-area-inset-bottom)) !important;
-    padding:5px 9px !important;
-    font-size:10px !important;
-    opacity:.88 !important;
+    right:6px !important;
+    bottom:calc(78px + env(safe-area-inset-bottom)) !important;
+    padding:4px 7px !important;
+    font-size:9px !important;
+    border-width:1.5px !important;
+    opacity:.78 !important;
+    box-shadow:0 2px 6px rgba(0,0,0,.14) !important;
   }
 
   html.mq-stage7-phone footer{
@@ -3828,11 +3835,11 @@
         - answer box is centred vertically on the bracket
       */
       const isPhone = document.documentElement.classList.contains('mq-stage7-phone');
-      const anchorWidth = isPhone ? 66 : 104;
-      const braceWidth = isPhone ? 20 : 26;
+      const anchorWidth = isPhone ? 90 : 104;
+      const braceWidth = isPhone ? 18 : 26;
       const braceLeft = 0;
-      const gapFromBars = isPhone ? 4 : 6;
-      const edgeInset = 2;
+      const gapFromBars = isPhone ? 5 : 6;
+      const edgeInset = 4;
 
       const rawTop = Math.round((topRect.top - areaRect.top) + (topRect.height * 0.08));
       const rawBottom = isPhone
@@ -3856,7 +3863,7 @@
       type3SideBrace.style.width = `${braceWidth}px`;
       type3SideBrace.style.height = `${anchorHeight}px`;
 
-      type3SideLabelTarget.style.left = `${braceLeft + braceWidth + 8}px`;
+      type3SideLabelTarget.style.left = `${braceLeft + braceWidth + (isPhone ? 5 : 8)}px`;
       type3SideLabelTarget.style.top = `${Math.round((anchorHeight / 2) - (targetHeight / 2))}px`;
 
       updateSideBraceSvg(type3SideBrace);
