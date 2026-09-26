@@ -2513,6 +2513,376 @@
       }
     }
   </style>
+
+<script id="stage7-real-phone-detector">
+(function(){
+  function smallestViewport(){
+    const vals=[];
+    try{ if(window.innerWidth) vals.push(window.innerWidth); }catch(e){}
+    try{ if(document.documentElement.clientWidth) vals.push(document.documentElement.clientWidth); }catch(e){}
+    try{ if(window.visualViewport && window.visualViewport.width) vals.push(window.visualViewport.width); }catch(e){}
+    try{ if(window.top && window.top.innerWidth) vals.push(window.top.innerWidth); }catch(e){}
+    try{ if(window.screen && window.screen.width) vals.push(window.screen.width); }catch(e){}
+    return vals.length ? Math.min.apply(null, vals) : 9999;
+  }
+
+  function applyStage7PhoneMode(){
+    document.documentElement.classList.toggle('mq-stage7-phone', smallestViewport() <= 1100);
+  }
+
+  applyStage7PhoneMode();
+  window.addEventListener('resize', applyStage7PhoneMode);
+  window.addEventListener('orientationchange', applyStage7PhoneMode);
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', applyStage7PhoneMode);
+  }
+  try{
+    if(window.top && window.top !== window){
+      window.top.addEventListener('resize', applyStage7PhoneMode);
+    }
+  }catch(e){}
+})();
+</script>
+
+<style id="stage7-match-stage1-mobile-layout">
+  html.mq-stage7-phone,
+  html.mq-stage7-phone body{
+    width:100% !important;
+    height:auto !important;
+    min-height:100% !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  html.mq-stage7-phone body{
+    position:relative !important;
+    inset:auto !important;
+    overscroll-behavior-y:auto !important;
+    touch-action:pan-y !important;
+    padding-bottom:calc(110px + env(safe-area-inset-bottom)) !important;
+  }
+
+  html.mq-stage7-phone .fit-viewport{
+    position:relative !important;
+    inset:auto !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:100dvh !important;
+    overflow:visible !important;
+    display:block !important;
+    padding:0 !important;
+  }
+
+  html.mq-stage7-phone .fit-stage{
+    position:relative !important;
+    left:0 !important;
+    top:0 !important;
+    width:100% !important;
+    height:auto !important;
+    transform:none !important;
+    transform-origin:top left !important;
+  }
+
+  html.mq-stage7-phone .page{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:8px !important;
+  }
+
+  html.mq-stage7-phone .hero{
+    width:100% !important;
+    padding:14px !important;
+    margin-bottom:12px !important;
+    border-radius:22px !important;
+  }
+
+  html.mq-stage7-phone .hero-top{
+    align-items:flex-start !important;
+  }
+
+  html.mq-stage7-phone .title-wrap h1{
+    font-size:28px !important;
+    line-height:1.1 !important;
+  }
+
+  html.mq-stage7-phone .title-wrap p{
+    font-size:16px !important;
+    line-height:1.35 !important;
+  }
+
+  html.mq-stage7-phone .scoreboard{
+    width:100% !important;
+    gap:6px !important;
+  }
+
+  html.mq-stage7-phone .pill{
+    min-width:0 !important;
+    flex:1 1 105px !important;
+    padding:8px 10px !important;
+    font-size:15px !important;
+  }
+
+  html.mq-stage7-phone .mode-bar{
+    gap:6px !important;
+  }
+
+  html.mq-stage7-phone .mode-btn{
+    flex:1 1 90px !important;
+    font-size:16px !important;
+    padding:10px 8px !important;
+  }
+
+  html.mq-stage7-phone .mission-card{
+    padding:10px !important;
+  }
+
+  html.mq-stage7-phone .mission-stars{
+    gap:4px !important;
+    flex-wrap:wrap !important;
+  }
+
+  html.mq-stage7-phone .mission-star{
+    width:28px !important;
+    height:28px !important;
+    font-size:15px !important;
+  }
+
+  html.mq-stage7-phone .main-grid{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:12px !important;
+    width:100% !important;
+    align-items:start !important;
+  }
+
+  html.mq-stage7-phone .card,
+  html.mq-stage7-phone .panel-card,
+  html.mq-stage7-phone .work-card{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    min-height:0 !important;
+    height:auto !important;
+    padding:12px !important;
+    overflow:visible !important;
+  }
+
+  html.mq-stage7-phone #modelCard{order:1 !important;}
+  html.mq-stage7-phone #toolCard{order:2 !important;}
+  html.mq-stage7-phone #workCard{order:3 !important;}
+
+  html.mq-stage7-phone .type-badge{
+    font-size:18px !important;
+    padding:8px 10px !important;
+  }
+
+  html.mq-stage7-phone .question-text{
+    font-size:21px !important;
+    line-height:1.38 !important;
+  }
+
+  html.mq-stage7-phone .mini-note,
+  html.mq-stage7-phone .tool-note,
+  html.mq-stage7-phone .work-note,
+  html.mq-stage7-phone .builder-note,
+  html.mq-stage7-phone #labelToolHelp{
+    font-size:15px !important;
+    line-height:1.35 !important;
+  }
+
+  html.mq-stage7-phone{
+    --unit-w:clamp(34px,10vw,44px);
+    --unit-h:36px;
+  }
+
+  html.mq-stage7-phone .model-area{
+    width:100% !important;
+    margin-top:10px !important;
+    padding-right:0 !important;
+    padding-bottom:12px !important;
+    gap:8px !important;
+  }
+
+  html.mq-stage7-phone .model-row{
+    grid-template-columns:1fr !important;
+    gap:6px !important;
+    width:100% !important;
+  }
+
+  html.mq-stage7-phone .row-label{
+    width:max-content !important;
+    max-width:100% !important;
+    min-height:40px !important;
+    margin-top:0 !important;
+    padding:7px 10px !important;
+    font-size:18px !important;
+  }
+
+  html.mq-stage7-phone .drop-shell,
+  html.mq-stage7-phone .annot-wrap,
+  html.mq-stage7-phone .drop-zone{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  html.mq-stage7-phone .annot-wrap{
+    min-height:122px !important;
+  }
+
+  html.mq-stage7-phone .drop-zone{
+    min-height:62px !important;
+    padding:10px 6px !important;
+  }
+
+  html.mq-stage7-phone .model-area.type1-layout > .model-row:nth-of-type(2),
+  html.mq-stage7-phone .model-area.type2-layout > .model-row:nth-of-type(2),
+  html.mq-stage7-phone .model-area.type3-layout > .model-row:nth-of-type(2){
+    transform:none !important;
+  }
+
+  html.mq-stage7-phone .type3-partwhole{
+    padding:12px 4px 8px !important;
+  }
+
+  html.mq-stage7-phone .type3-whole-block,
+  html.mq-stage7-phone .type3-partwhole-labels{
+    width:calc(100% - 20px) !important;
+    margin-left:10px !important;
+  }
+
+  html.mq-stage7-phone .tool-shell,
+  html.mq-stage7-phone .toolbox,
+  html.mq-stage7-phone .equation-wrap{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  html.mq-stage7-phone .subpanel{
+    width:100% !important;
+    padding:10px !important;
+  }
+
+  html.mq-stage7-phone .palette-unit,
+  html.mq-stage7-phone .ghost-unit{
+    width:78px !important;
+    height:50px !important;
+    font-size:16px !important;
+  }
+
+  html.mq-stage7-phone .palette-tag,
+  html.mq-stage7-phone .ghost-tag{
+    min-width:72px !important;
+    height:44px !important;
+    padding:0 10px !important;
+    font-size:16px !important;
+  }
+
+  html.mq-stage7-phone .eq-line{
+    width:100% !important;
+    max-width:100% !important;
+    flex-wrap:nowrap !important;
+    gap:4px !important;
+    font-size:17px !important;
+    line-height:1.35 !important;
+    overflow-x:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    padding-bottom:3px !important;
+  }
+
+  html.mq-stage7-phone .eq-indent-text,
+  html.mq-stage7-phone .eq-indent,
+  html.mq-stage7-phone .eq-label,
+  html.mq-stage7-phone .eq-spacer{
+    width:64px !important;
+    min-width:64px !important;
+  }
+
+  html.mq-stage7-phone .eq-under-units{
+    width:72px !important;
+    min-width:72px !important;
+  }
+
+  html.mq-stage7-phone .eq-symbol{
+    width:16px !important;
+    min-width:16px !important;
+  }
+
+  html.mq-stage7-phone .blank{
+    width:58px !important;
+    min-width:58px !important;
+    height:38px !important;
+    padding:3px 4px !important;
+    font-size:17px !important;
+  }
+
+  html.mq-stage7-phone .blank.small{
+    width:54px !important;
+    min-width:54px !important;
+  }
+
+  html.mq-stage7-phone #workCard{
+    min-height:560px !important;
+    margin-bottom:calc(70px + env(safe-area-inset-bottom)) !important;
+  }
+
+  html.mq-stage7-phone .work-head{
+    margin-bottom:8px !important;
+  }
+
+  html.mq-stage7-phone .work-area{
+    width:100% !important;
+    min-height:430px !important;
+    height:430px !important;
+    flex:0 0 430px !important;
+    overflow:hidden !important;
+  }
+
+  html.mq-stage7-phone #workingCanvas{
+    width:100% !important;
+    height:100% !important;
+    touch-action:none !important;
+  }
+
+  html.mq-stage7-phone .place-head{
+    left:12px !important;
+  }
+
+  html.mq-stage7-phone .reward-screen:not(.show){
+    display:none !important;
+  }
+
+  html.mq-stage7-phone .reward-screen.show{
+    display:grid !important;
+    width:100% !important;
+    max-width:100% !important;
+    padding:16px !important;
+  }
+
+  html.mq-stage7-phone .reward-screen h2{
+    font-size:32px !important;
+  }
+
+  html.mq-stage7-phone .reward-screen p{
+    font-size:18px !important;
+  }
+
+  html.mq-stage7-phone .end-screen{
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  html.mq-stage7-phone .back-main-btn{
+    bottom:calc(84px + env(safe-area-inset-bottom)) !important;
+  }
+
+  html.mq-stage7-phone footer{
+    margin-bottom:calc(24px + env(safe-area-inset-bottom)) !important;
+  }
+</style>
+
 </head>
 <body>
 <a class="back-main-btn" href="#" data-stage-return="7">
@@ -3274,6 +3644,9 @@
     }
 
     function clearWorking(){
+      workingDrawing = false;
+      workingLastPoint = null;
+      workingCurrentStroke = null;
       workingStrokes = [];
       if(!workingCtx) return;
       const w = parseFloat(workingCanvas.style.width) || 0;
@@ -3784,6 +4157,7 @@
     }
 
     function startMode(mode){
+      clearWorking();
       const requestedMode = mode;
       if(!isModeUnlocked(requestedMode)){
         mode = getNextRequiredMode();
@@ -4128,6 +4502,7 @@
 
     function nextQuestion(){
       if(!solved) return;
+      clearWorking();
       modeProgress[currentMode] = Math.max(modeProgress[currentMode], currentIndex + 1);
       if(journeyProgress >= JOURNEY_TARGET){
         showRewardScreen();
@@ -4333,6 +4708,16 @@
 
     function applyViewportFit(){
       if(!fitStage || !page) return;
+
+      if(document.documentElement.classList.contains('mq-stage7-phone')){
+        fitStage.style.transform = 'none';
+        fitStage.style.left = '0px';
+        fitStage.style.top = '0px';
+        fitStage.style.width = '100%';
+        fitStage.style.height = 'auto';
+        return;
+      }
+
       fitStage.style.transform = 'scale(1)';
       fitStage.style.left = '0px';
       fitStage.style.top = '0px';
